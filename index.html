@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Prevent Aggressive Browser Caching -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>PuskesPharma - Sistem Farmasi & Apotik Puskesmas</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js CDN for visual analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-theme="light" data-accent="teal">
+
+  <!-- 1. PORTAL LOGIN MULTI-USER -->
+  <div id="login-portal">
+    <div class="login-container glass-card">
+      
+      <!-- Left Panel (Brand and Hero) -->
+      <div class="login-info-side">
+        <div class="brand-wrapper">
+          <div class="brand-logo-circle" id="login-logo-container" style="overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+            <img id="login-logo-img" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none;" alt="Logo Puskesmas">
+            <!-- Fallback Medical Cross Icon -->
+            <svg id="login-logo-fallback" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </div>
+          <span class="brand-name-lg" id="login-pharmacy-name">PuskesPharma</span>
+        </div>
+        
+        <div class="login-hero-text">
+          <h1>Pelayanan Kefarmasian Puskesmas Lebih Efisien</h1>
+          <p>Sistem informasi pengelolaan resep pasien BPJS & Umum, pengendalian stok obat per batch/expired date, distribusi sub-unit, dan pelaporan LPLPO dinamis dalam satu platform terintegrasi.</p>
+        </div>
+        
+        <div class="login-footer-info">
+          <p>&copy; 2026 <span id="login-copyright-name">Puskesmas Kecamatan</span>. Hak Cipta Dilindungi.</p>
+        </div>
+      </div>
+
+      <!-- Form Panel (Right) -->
+      <div class="login-form-side">
+        <div class="login-header-form">
+          <h2>Selamat Datang</h2>
+          <p class="text-muted">Masukkan kredensial masuk Administrator Apotek</p>
+        </div>
+
+        <!-- Credentials Hint -->
+        <div class="credentials-hint" id="login-hint">
+          <span>Kredensial Demo Apoteker / Admin:</span>
+          <span>Username: <strong>admin</strong> | Password: <strong>admin123</strong></span>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="login-username">Username</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" id="login-username" class="form-control" placeholder="Masukkan username" required autocomplete="username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="login-password" class="form-control" placeholder="Masukkan password" required autocomplete="current-password">
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px; padding: 12px;">
+            Masuk ke Sistem
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 2. MAIN APPLICATION SHELL -->
+  <div id="app-shell" class="hidden">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar glass-card">
+      <div class="sidebar-header">
+        <div class="sidebar-logo" id="sidebar-logo-container" style="overflow: hidden; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); position: relative; background: var(--primary-light);">
+          <img id="sidebar-logo-img" style="width: 100%; height: 100%; object-fit: cover; display: none;" alt="Logo">
+          <svg id="sidebar-logo-fallback" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </div>
+        <span class="sidebar-title" id="sidebar-pharmacy-name">PuskesPharma</span>
+      </div>
+      
+      <ul class="sidebar-menu">
+        <li class="sidebar-link active" id="nav-dashboard" onclick="switchTab('dashboard')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          <span>Dashboard</span>
+        </li>
+        <li class="sidebar-link" id="nav-pos" onclick="switchTab('pos')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 5-5-5-5 5"/><path d="m17 19-5 5-5-5"/></svg>
+          <span>Pelayanan Resep</span>
+        </li>
+        <li class="sidebar-link" id="nav-dispense" onclick="switchTab('dispense')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Pengeluaran Resep</span>
+        </li>
+        <li class="sidebar-link" id="nav-inventory" onclick="switchTab('inventory')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 21.5h3a6 6 0 0 0 6-6v-7a6 6 0 0 0-6-6h-3a6 6 0 0 0-6 6v7a6 6 0 0 0 6 6Z"/><path d="M4.5 10.5h15"/><path d="M12 2.5v19"/></svg>
+          <span>Kartu Stok</span>
+        </li>
+        <li class="sidebar-link" id="nav-opname" onclick="switchTab('opname')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+          <span>Stok Opname</span>
+        </li>
+        <li class="sidebar-link" id="nav-mutation" onclick="switchTab('mutation')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7 17 11"/><path d="M3 17 7 21 3 25"/><path d="M21 7H9a5 5 0 0 0-5 5v3"/><path d="M3 17h12a5 5 0 0 0 5-5V9"/></svg>
+          <span>Mutasi Sub-Unit</span>
+        </li>
+        <li class="sidebar-link" id="nav-lplpo" onclick="switchTab('lplpo')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Stok Obat</span>
+        </li>
+
+        <li class="sidebar-link" id="nav-settings" onclick="switchTab('settings')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span>Pengaturan</span>
+        </li>
+      </ul>
+      
+      <!-- Footer User Profile Info -->
+      <div class="sidebar-user">
+        <div class="user-avatar" id="sidebar-user-avatar">A</div>
+        <div class="user-details">
+          <div class="user-name" id="sidebar-user-name">Apoteker</div>
+          <div class="user-role" id="sidebar-user-role">Kepala Apotek</div>
+        </div>
+        <div class="btn-logout" title="Keluar dari Aplikasi" onclick="openLogoutModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Workspace Area -->
+    <main class="main-content">
+      
+      <!-- Header Navbar -->
+      <header class="app-header glass-card">
+        <div class="header-search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="global-search" placeholder="Cari obat cepat..." oninput="handleGlobalSearch(this.value)">
+        </div>
+        
+        <div class="header-actions">
+          <div class="header-stat" id="header-pharmacy-name">Apotik Puskesmas</div>
+          
+          <!-- Theme Toggle Button -->
+          <button class="btn btn-secondary btn-icon" id="theme-toggle-btn" onclick="toggleTheme()" title="Ubah Mode Gelap/Terang">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Screens Content Body Wrapper -->
+      <div class="content-body">
+
+        <!-- ======================================= -->
+        <!-- SCREEN 1: DASHBOARD -->
+        <!-- ======================================= -->
+        <section id="screen-dashboard" class="app-screen active">
+          <div class="screen-header">
+            <div class="screen-title">
+              <h2>Dashboard Analitik Farmasi</h2>
+              <p>Ringkasan resep dilayani, kendali ketersediaan obat kritis, dan kepesertaan pasien.</p>
+            </div>
+          </div>
+          
+          <!-- Metrics Grid Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card glass-card">
+              <div class="metric-info">
+                <h3>Resep Dilayani</h3>
+                <div class="value" id="metric-recipes">0</div>
+              </div>
+              <div class="metric-icon metric-emerald">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+            </div>
+            <div class="metric-card glass-card">
+              <div class="metric-info">
+                <h3>Pasien BPJS</h3>
+                <div class="value" id="metric-bpjs">0</div>
+              </div>
+              <div class="metric-icon metric-indigo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+            </div>
+            <div class="metric-card glass-card">
+              <div class="metric-info">
+                <h3>Stok Kritis/Habis</h3>
+                <div class="value text-warning" id="metric-low-stock">0</div>
+              </div>
+              <div class="metric-icon metric-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+            </div>
+            <div class="metric-card glass-card">
+              <div class="metric-info">
+                <h3>Hampir Kedaluwarsa</h3>
+                <div class="value text-danger" id="metric-expired">0</div>
+              </div>
+              <div class="metric-icon metric-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts and Notification Alerts -->
+          <div class="dashboard-grid">
+            
+            <!-- Tren Chart (Kiri) -->
+            <div class="chart-card glass-card">
+              <div class="card-title">Grafik Performa Penyaluran Obat & Pasien</div>
+              <div style="flex-grow: 1; position: relative; max-height: 270px;">
+                <canvas id="salesChart" style="width: 100%; height: 100%;"></canvas>
+              </div>
+            </div>
+            
+            <!-- Warnings/Alerts (Kanan) -->
+            <div class="alert-card glass-card">
+              <div class="card-title">Notifikasi Pengawasan Apotek</div>
+              <div class="alert-list" id="dashboard-alerts">
+                <div class="text-muted" style="text-align: center; margin-top: 40px;">Sistem dalam kondisi kondusif</div>
+              </div>
+            </div>
+          </div>
+
+
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 2: POINT OF DISPENSING / PELAYANAN RESEP -->
+        <!-- ======================================= -->
+        <section id="screen-pos" class="app-screen">
+          <!-- 1. LIST VIEW (Tabel Resep Obat) -->
+          <div id="pos-list-view">
+            <div class="screen-header" style="align-items: flex-start; margin-bottom: 8px;">
+              <div class="screen-title">
+                <h2>Resep Obat</h2>
+                <p>Input resep harian &mdash; terhubung otomatis ke Pengeluaran Resep & Kartu Stok. Resep dengan tanggal, nama obat & no batch sama akan digabung otomatis.</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" onclick="exportToExcel()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Excel
+                </button>
+                <button class="btn btn-secondary" onclick="exportToPDF()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> PDF
+                </button>
+                <button class="btn btn-primary" onclick="showAddPrescriptionForm()" style="background-color: #6d28d9; color: white; padding: 8px 16px; font-size: 0.8rem;">
+                  <span style="font-weight: bold; margin-right: 4px;">+</span> Tambah Resep
+                </button>
+              </div>
+            </div>
+
+            <!-- Segment Controls UMUM / BPJS -->
+            <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+              <button class="filter-btn active" id="pos-tab-umum" onclick="setPrescriptionTab('Umum')" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm);">UMUM</button>
+              <button class="filter-btn" id="pos-tab-bpjs" onclick="setPrescriptionTab('BPJS')" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm);">BPJS</button>
+            </div>
+
+            <!-- Filter Card -->
+            <div class="inventory-controls glass-card" style="padding: 16px; margin-bottom: 20px; display: grid; grid-template-columns: 1.2fr 1.2fr 2fr; gap: 16px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="pos-filter-start-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Dari Tanggal</label>
+                <input type="date" id="pos-filter-start-date" class="form-control" onchange="renderPrescriptionTable()">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="pos-filter-end-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Sampai Tanggal</label>
+                <input type="date" id="pos-filter-end-date" class="form-control" onchange="renderPrescriptionTable()">
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label for="pos-filter-search" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Pencarian</label>
+                <input type="text" id="pos-filter-search" class="form-control" placeholder="Cari nama obat, batch..." oninput="renderPrescriptionTable()">
+              </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="glass-card" style="padding: 24px;">
+              <div class="table-responsive">
+                <table class="table-custom" style="font-size:0.85rem; width: 100%;">
+                  <thead>
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>No Resep</th>
+                      <th>Nama Obat</th>
+                      <th>Tipe</th>
+                      <th>No Batch</th>
+                      <th>Status Expired</th>
+                      <th>Pengeluaran</th>
+                      <th>Jml Lembar</th>
+                      <th>Total Obat</th>
+                      <th>Item Generik</th>
+                      <th>Nama Obat Non-Generik</th>
+                      <th style="text-align: right;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="prescription-table-tbody">
+                    <!-- JS Render grouped rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. FORM VIEW (Toggled/Hidden by default) -->
+          <div id="pos-form-view" class="hidden">
+            <div class="screen-header" style="margin-bottom: 20px; justify-content: center;">
+              <div class="screen-title" style="display:flex; align-items:center; gap:16px; width: 100%; max-width: 640px;">
+                <button class="btn btn-secondary btn-icon" onclick="hideAddPrescriptionForm()" title="Kembali ke Daftar Resep" style="width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; background: white; border: 1px solid var(--border-color);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <div>
+                  <h2 id="pos-form-title" style="font-size: 1.3rem;">Tambah Resep</h2>
+                  <p>Masukkan data resep obat baru.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="prescription-form-container" style="max-width: 640px; margin: 0 auto;">
+              <div class="glass-card" style="padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: var(--shadow-lg);">
+                
+                <!-- Baris 1: Tanggal & Nomor Resep -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="prescription-date" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Tanggal</label>
+                    <input type="date" id="prescription-date" class="form-control" style="border: 1.5px solid #a855f7; border-radius: 8px; padding: 10px 12px; background: #fff;" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="prescription-number" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Nomor Resep</label>
+                    <input type="text" id="prescription-number" class="form-control" placeholder="cth: R-2026-0001" style="border-radius: 8px; padding: 10px 12px; background: #fff;" required>
+                  </div>
+                </div>
+
+                <!-- Baris 2: Daftar Obat & Tambah Obat Button -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                  <span style="font-weight: 600; color: var(--text-main); font-size: 0.88rem;">Daftar Obat dalam 1 Lembar Resep</span>
+                  <button type="button" class="btn btn-secondary" onclick="addEmptyCartRow()" style="border-radius: 8px; padding: 8px 16px; font-size: 0.78rem; font-weight: 700; border: 1px solid var(--border-color); background: #fff; color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Tambah Obat
+                  </button>
+                </div>
+
+                <!-- Baris 3: Medicines Container -->
+                <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto;" id="cart-items-container">
+                  <!-- Rendered dynamically by JS -->
+                  <div class="text-muted" style="text-align: center; padding: 20px 0;">Belum ada obat ditambahkan.</div>
+                </div>
+
+                <!-- Baris 4: Tiga Kolom (Jumlah Lembar Resep, Total Obat, Item Generik) -->
+                <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 16px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="prescription-sheet-count" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Jumlah Lembar Resep</label>
+                    <input type="number" id="prescription-sheet-count" class="form-control" value="1" min="1" style="border-radius: 8px; padding: 10px 12px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="prescription-total-qty" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Total Obat Dalam Resep</label>
+                    <input type="number" id="prescription-total-qty" class="form-control" value="0" readonly style="border-radius: 8px; padding: 10px 12px; background-color: var(--bg-badge);">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label for="prescription-generic-count" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Item Generik</label>
+                    <input type="number" id="prescription-generic-count" class="form-control" value="0" min="0" style="border-radius: 8px; padding: 10px 12px;">
+                  </div>
+                </div>
+
+                <!-- Baris 5: Nama Obat Non-Generik -->
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="prescription-nongeneric-names" style="font-weight: 600; color: var(--text-main); font-size: 0.85rem; margin-bottom: 6px; display: block;">Nama Obat Non-Generik</label>
+                  <input type="text" id="prescription-nongeneric-names" class="form-control" placeholder="Kosongkan jika tidak ada" style="border-radius: 8px; padding: 10px 12px;">
+                  <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; display: block;">Akan tampil pada kolom yang sama di menu Pengeluaran Resep.</span>
+                </div>
+
+                <!-- Hidden input to store editing index -->
+                <input type="hidden" id="pos-editing-invoice" value="">
+
+                <!-- Baris 6: Action Button -->
+                <button class="btn btn-primary btn-checkout" onclick="processCheckout()" style="margin-top: 8px; width: 100%; justify-content: center; background-color: #6d28d9; color: white; border-radius: 8px; padding: 12px; font-weight: 600; font-size: 0.95rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Simpan Resep
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 7: PENGELUARAN RESEP -->
+        <!-- ======================================= -->
+        <section id="screen-dispense" class="app-screen">
+          <div class="screen-header" style="align-items: flex-start; margin-bottom: 8px;">
+            <div class="screen-title">
+              <h2>Pengeluaran Resep</h2>
+              <p>Rekap harian otomatis dari Resep Obat &mdash; UMUM & BPJS dipisah ketat. % Generik = Item Generik / Total Obat &times; 100</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" onclick="exportDispenseExcel()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Excel
+              </button>
+              <button class="btn btn-secondary" onclick="exportDispensePDF()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> PDF
+              </button>
+              <button class="btn btn-secondary" onclick="printDispense()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print
+              </button>
+            </div>
+          </div>
+
+          <!-- Segment Controls UMUM / BPJS -->
+          <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+            <button class="filter-btn active" id="dispense-tab-umum" onclick="setDispenseTab('Umum')" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm);">UMUM</button>
+            <button class="filter-btn" id="dispense-tab-bpjs" onclick="setDispenseTab('BPJS')" style="padding: 8px 16px; font-size: 0.8rem; border-radius: var(--radius-sm);">BPJS</button>
+          </div>
+
+          <!-- Filter Card -->
+          <div class="inventory-controls glass-card" style="padding: 16px; margin-bottom: 20px; display: grid; grid-template-columns: 1.2fr 1.2fr 2fr; gap: 16px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="dispense-filter-start-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Dari Tanggal</label>
+              <input type="date" id="dispense-filter-start-date" class="form-control" onchange="renderDispenseTable()">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="dispense-filter-end-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Sampai Tanggal</label>
+              <input type="date" id="dispense-filter-end-date" class="form-control" onchange="renderDispenseTable()">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="dispense-filter-search" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Pencarian</label>
+              <input type="text" id="dispense-filter-search" class="form-control" placeholder="Cari nama obat, batch..." oninput="renderDispenseTable()">
+            </div>
+          </div>
+
+          <!-- Table Card -->
+          <div class="glass-card" style="padding: 24px;">
+            <div class="table-responsive">
+              <table class="table-custom" style="font-size:0.85rem; width: 100%;">
+                <thead>
+                  <tr>
+                    <th>Tanggal Resep</th>
+                    <th>Jumlah Lembar Resep</th>
+                    <th>Total Obat Dalam Resep</th>
+                    <th>Jumlah Item Obat Generik</th>
+                    <th>% Obat Generik</th>
+                    <th>Nama Obat Non-Generik</th>
+                  </tr>
+                </thead>
+                <tbody id="dispense-table-tbody">
+                  <!-- JS Render grouped rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 3: KARTU STOK -->
+        <!-- ======================================= -->
+        <section id="screen-inventory" class="app-screen">
+          <div class="screen-header" style="align-items: flex-start; margin-bottom: 8px;">
+            <div class="screen-title">
+              <h2>Kartu Stok</h2>
+              <p>Riwayat pergerakan stok obat &mdash; masuk, keluar, dan saldo akhir</p>
+            </div>
+            <div class="inventory-header-actions">
+              <button class="btn btn-secondary" onclick="exportInventoryExcel()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Excel
+              </button>
+              <button class="btn btn-secondary" onclick="exportInventoryPDF()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> PDF
+              </button>
+              <button class="btn btn-secondary" onclick="printInventory()" style="padding: 8px 14px; font-size: 0.8rem; background: white; border: 1px solid var(--border-color); color: var(--text-main); display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print
+              </button>
+              <button class="btn btn-primary" onclick="openAddMedicineModal()" style="background-color: #6d28d9; color: white; padding: 8px 16px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; border: none; border-radius: var(--radius-md);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.12l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.12l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Tambah Obat / Stok Masuk
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls Filter & Search -->
+          <div class="inventory-grid-controls glass-card" style="padding: 16px; margin-bottom: 20px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="inventory-filter-start-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Dari Tanggal</label>
+              <input type="date" id="inventory-filter-start-date" class="form-control" onchange="renderInventory()">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="inventory-filter-end-date" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Sampai Tanggal</label>
+              <input type="date" id="inventory-filter-end-date" class="form-control" onchange="renderInventory()">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="inventory-search" style="font-size:0.75rem; font-weight:700; color: var(--text-muted); display: block; margin-bottom: 4px;">Pencarian</label>
+              <input type="text" id="inventory-search" class="form-control" placeholder="Cari nama obat, batch..." oninput="renderInventory()">
+            </div>
+          </div>
+
+          <!-- Inventory Table -->
+          <div class="glass-card" style="padding: 24px;">
+            <div class="table-responsive">
+              <table class="table-custom text-center-headers">
+                <thead>
+                  <tr style="border-bottom: 1.5px solid var(--border-color);">
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding: 12px 10px;">Tanggal</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding: 12px 10px;">Dari</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding: 12px 10px;">Nama Obat</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: center; padding: 12px 10px;">No Batch</th>
+                    <th colspan="2" style="text-align: center; background-color: rgba(139, 92, 246, 0.05); color: #7c3aed; font-weight: 700; border: 1px solid var(--border-color); padding: 6px 10px;">Resep</th>
+                    <th colspan="2" style="text-align: center; background-color: rgba(59, 130, 246, 0.05); color: #2563eb; font-weight: 700; border: 1px solid var(--border-color); padding: 6px 10px;">Amprahan</th>
+                    <th colspan="2" style="text-align: center; background-color: rgba(239, 68, 68, 0.05); color: #b91c1c; font-weight: 700; border: 1px solid var(--border-color); padding: 6px 10px;">Opname</th>
+                    <th colspan="2" style="text-align: center; background-color: rgba(16, 185, 129, 0.05); color: #059669; font-weight: 700; border: 1px solid var(--border-color); padding: 6px 10px;">Gudang</th>
+                    <th colspan="2" style="text-align: center; background-color: rgba(107, 114, 128, 0.05); color: #374151; font-weight: 700; border: 1px solid var(--border-color); padding: 6px 10px;">Total</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding: 12px 10px;">Tgl Expired</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: center; padding: 12px 10px;">Jumlah Stok</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: right; padding: 12px 10px;">Aksi</th>
+                  </tr>
+                  <tr style="border-bottom: 1.5px solid var(--border-color);">
+                    <th style="text-align: center; font-size: 0.72rem; color: #059669; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Masuk</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #dc2626; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Keluar</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #059669; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Masuk</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #dc2626; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Keluar</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #059669; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Masuk</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #dc2626; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Keluar</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #059669; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Masuk</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #dc2626; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Keluar</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #059669; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Masuk</th>
+                    <th style="text-align: center; font-size: 0.72rem; color: #dc2626; font-weight: 600; padding: 4px 6px; border: 1px solid var(--border-color);">Keluar</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                  <!-- JS Render -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 8: STOK OPNAME -->
+        <!-- ======================================= -->
+        <section id="screen-opname" class="app-screen">
+          <div class="screen-header" style="align-items: flex-start; margin-bottom: 8px;">
+            <div class="screen-title">
+              <h2>Stok Opname</h2>
+              <p>Penyelarasan jumlah fisik obat di gudang dengan catatan sistem PuskesPharma</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Form Input Opname (Kiri) -->
+            <div class="settings-card glass-card">
+              <div class="card-title">Form Input Stok Opname</div>
+              <form id="form-opname" onsubmit="handleSaveOpname(event)">
+                <div class="form-group">
+                  <label for="opname-medicine">Pilih Obat & Batch</label>
+                  <select id="opname-medicine" class="form-control" onchange="updateOpnameCalculations()" required>
+                    <option value="">-- Pilih Obat --</option>
+                  </select>
+                </div>
+
+                <div class="modal-form-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+                  <div class="form-group">
+                    <label for="opname-system-stock">Stok Sistem (Komputer)</label>
+                    <input type="number" id="opname-system-stock" class="form-control" readonly style="background-color: var(--bg-badge); font-weight: bold; color: var(--text-main);">
+                  </div>
+                  <div class="form-group">
+                    <label for="opname-physical-stock">Stok Fisik Aktual (Gudang)</label>
+                    <input type="number" id="opname-physical-stock" class="form-control" placeholder="0" min="0" oninput="updateOpnameCalculations()" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Selisih Stok</label>
+                  <div id="opname-difference-wrapper" style="padding: 10px 14px; border-radius: var(--radius-md); font-weight: 800; font-size: 1.1rem; text-align: center; border: 1px solid var(--border-color); background-color: var(--bg-badge);">
+                    -
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="opname-reason">Alasan Penyesuaian</label>
+                  <select id="opname-reason" class="form-control" required>
+                    <option value="Koreksi Selisih">Koreksi Selisih (Selisih Hitung)</option>
+                    <option value="Obat Rusak">Obat Rusak / Cacat Kemasan</option>
+                    <option value="Obat Hilang">Obat Hilang / Kurang Pasok</option>
+                    <option value="Kedaluwarsa">Kedaluwarsa / Expired</option>
+                    <option value="Lainnya">Lainnya (Tulis di Catatan)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="opname-notes">Keterangan / Catatan Tambahan</label>
+                  <textarea id="opname-notes" class="form-control" placeholder="Contoh: Koreksi bulanan batch 012BE..." style="min-height: 80px;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Simpan Penyesuaian Stok
+                </button>
+              </form>
+            </div>
+
+            <!-- Riwayat Opname (Kanan) -->
+            <div class="settings-card glass-card" style="display: flex; flex-direction: column; justify-content: flex-start;">
+              <div class="card-title">Riwayat Log Stok Opname</div>
+              <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                <table class="table-custom" style="font-size: 0.78rem;">
+                  <thead>
+                    <tr>
+                      <th style="text-align: left; padding: 10px 8px;">Waktu</th>
+                      <th style="text-align: left; padding: 10px 8px;">Obat (Batch)</th>
+                      <th style="text-align: center; padding: 10px 8px;">Sistem</th>
+                      <th style="text-align: center; padding: 10px 8px;">Fisik</th>
+                      <th style="text-align: center; padding: 10px 8px;">Selisih</th>
+                      <th style="text-align: left; padding: 10px 8px;">Alasan</th>
+                      <th style="text-align: left; padding: 10px 8px;">Petugas</th>
+                    </tr>
+                  </thead>
+                  <tbody id="opname-history-tbody">
+                    <!-- JS Render -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 4: MUTASI SUB-UNIT INTERNAL -->
+        <!-- ======================================= -->
+        <section id="screen-mutation" class="app-screen">
+          <div class="screen-header">
+            <div class="screen-title">
+              <h2>Pendistribusian & Mutasi Obat Internal</h2>
+              <p>Salurkan pasokan obat dari Gudang Farmasi utama ke Poli Gigi, UGD, Pustu, KIA, atau Kamar Obat.</p>
+            </div>
+          </div>
+
+          <div style="max-width: 640px; margin: 0 auto 24px auto;">
+            <!-- Form Mutasi -->
+            <div class="settings-card glass-card" style="box-shadow: var(--shadow-lg);">
+              <div class="card-title">Form Transfer Stok Baru</div>
+              
+              <form id="form-mutation" onsubmit="handleProcessMutation(event)">
+                
+                <!-- Section Header: Daftar Obat & Tambah Obat Button -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-weight: 600; color: var(--text-main); font-size: 0.88rem;">Daftar Obat yang Didistribusikan</span>
+                  <button type="button" class="btn btn-secondary" onclick="addEmptyMutationRow()" style="border-radius: 8px; padding: 6px 12px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--border-color); background: #fff; color: var(--text-main); display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Tambah Obat
+                  </button>
+                </div>
+
+                <!-- Container for dynamic rows -->
+                <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; margin-bottom: 16px;" id="mutation-items-container">
+                  <!-- Rendered dynamically by JS -->
+                </div>
+                
+                <div class="modal-form-grid" style="grid-template-columns: 1.2fr 0.8fr; margin-bottom: 0;">
+                  <div class="form-group">
+                    <label for="mutation-destination">Unit Penerima (Tujuan)</label>
+                    <select id="mutation-destination" class="form-control" required>
+                      <option value="Apotek Pelayanan">Apotek Pelayanan (Kamar Obat)</option>
+                      <option value="Unit Gawat Darurat (UGD)">Unit Gawat Darurat (UGD)</option>
+                      <option value="Poli Gigi & Mulut">Poli Gigi & Mulut</option>
+                      <option value="Poli KIA/KB">Poli KIA/KB</option>
+                      <option value="Pustu (Puskesmas Pembantu)">Pustu (Puskesmas Pembantu)</option>
+                      <option value="Rawat Inap">Rawat Inap</option>
+                      <option value="Posyandu">Posyandu</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="mutation-notes">Keterangan / Catatan Mutasi</label>
+                    <input type="text" id="mutation-notes" class="form-control" placeholder="Contoh: Pasokan mingguan" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px; padding: 10px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22V12"/><path d="m17 17-5 5-5-5"/><path d="m17 7-5-5-5 5"/></svg>
+                  Proses Distribusi Stok
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- History Mutations Table -->
+          <div class="recent-transactions-card glass-card">
+            <div class="card-title">Riwayat Log Mutasi & Distribusi</div>
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th>Waktu Mutasi</th>
+                    <th>Nama Obat</th>
+                    <th>Batch</th>
+                    <th>Tujuan</th>
+                    <th>Jumlah (Qty)</th>
+                    <th>Apoteker PJ</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody id="mutation-history-tbody">
+                  <!-- JS Render -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================= -->
+        <!-- SCREEN 5: LAPORAN LPLPO DYNAMIS -->
+        <!-- ======================================= -->
+        <section id="screen-lplpo" class="app-screen">
+          <div class="screen-header">
+            <div class="screen-title">
+              <h2>Laporan Pemakaian & Lembar Permintaan Obat (LPLPO)</h2>
+              <p>Dokumen pelaporan resmi Puskesmas mengenai mutasi keluar-masuk obat dan pengajuan logistik periode bulanan.</p>
+            </div>
+            <button class="btn btn-primary" onclick="printLPLPOReport()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+              Cetak Dokumen LPLPO
+            </button>
+          </div>
+
+          <!-- Filter Period -->
+          <div class="inventory-controls glass-card" style="padding: 16px;">
+            <div class="inventory-filters" style="gap: 16px; align-items: center;">
+              <div>
+                <label for="lplpo-year" style="font-size: 0.72rem; font-weight:700; text-transform:uppercase; margin-right:8px;">Tahun</label>
+                <select id="lplpo-year" onchange="renderLPLPO()" style="padding: 8px 12px; font-weight: 600;">
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="lplpo-month" style="font-size: 0.72rem; font-weight:700; text-transform:uppercase; margin-right:8px;">Bulan Periode</label>
+                <select id="lplpo-month" onchange="renderLPLPO()" style="padding: 8px 12px; font-weight: 600;">
+                  <option value="01">Januari</option>
+                  <option value="02">Februari</option>
+                  <option value="03">Maret</option>
+                  <option value="04">April</option>
+                  <option value="05">Mei</option>
+                  <option value="06" selected>Juni</option>
+                  <option value="07">Juli</option>
+                  <option value="08">Agustus</option>
+                  <option value="09">September</option>
+                  <option value="10">Oktober</option>
+                  <option value="11">November</option>
+                  <option value="12">Desember</option>
+                </select>
+              </div>
+            </div>
+            
+            <div style="font-size: 0.78rem;" class="text-muted">
+              Penerimaan bersumber dari droping Gudang Farmasi Kabupaten/Dinkes. Pemakaian dihitung dari akumulasi resep keluar.
+            </div>
+          </div>
+
+          <!-- LPLPO Table -->
+          <div class="glass-card lplpo-table-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <h3 style="font-size: 1rem; font-weight: 800;">Tabel Rekapitulasi LPLPO</h3>
+              <span class="badge badge-info" id="lplpo-period-badge">Periode: Juni 2026</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-custom" style="font-size: 0.8rem; text-align: center;">
+                <thead>
+                  <tr>
+                    <th rowspan="2" style="text-align: left; vertical-align: middle;">No</th>
+                    <th rowspan="2" style="text-align: left; vertical-align: middle;">Nama Obat / Alkes</th>
+                    <th rowspan="2" style="vertical-align: middle;">Satuan</th>
+                    <th rowspan="2" style="vertical-align: middle;">No. Batch</th>
+                    <th rowspan="2" style="vertical-align: middle;">Expired</th>
+                    <th rowspan="2" style="vertical-align: middle;">Stok Awal</th>
+                    <th rowspan="2" style="vertical-align: middle;">Penerimaan (Stok Masuk)</th>
+                    <th rowspan="2" style="vertical-align: middle;">Persediaan (Awal+Masuk)</th>
+                    <th colspan="3" style="border-bottom: 1px solid var(--border-color);">Rincian Pemakaian</th>
+                    <th rowspan="2" style="vertical-align: middle;">Sisa Stok (Akhir)</th>
+                    <th rowspan="2" style="min-width: 100px; vertical-align: middle;">Permintaan Periode Berikutnya</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: center; width: 60px;">Aksi</th>
+                  </tr>
+                  <tr>
+                    <th>BPJS</th>
+                    <th>Umum</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="lplpo-table-tbody">
+                  <!-- JS Render -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+
+        <!-- ======================================= -->
+        <!-- SCREEN 7: PENGATURAN & TEMA -->
+        <!-- ======================================= -->
+        <section id="screen-settings" class="app-screen">
+          <div class="screen-header">
+            <div class="screen-title">
+              <h2>Pengaturan Aplikasi PuskesPharma</h2>
+              <p>Sesuaikan identitas Puskesmas untuk kop struk/dokumen LPLPO dan ganti visual skema aplikasi.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            
+            <!-- Estetika & Akun (Kiri) -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <!-- Aesthetic Card -->
+              <div class="settings-card glass-card">
+                <div class="card-title">Tema & Visual Antarmuka</div>
+                
+                <!-- Dark Mode Switch -->
+                <div class="toggle-switch-wrapper">
+                  <div>
+                    <div style="font-weight: 700; margin-bottom: 2px;">Mode Gelap (Dark Mode)</div>
+                    <div class="text-muted" style="font-size: 0.8rem;">Visual bernuansa gelap untuk meredakan ketegangan mata di malam hari.</div>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="settings-darkmode-toggle" onchange="toggleTheme()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <!-- Accent Color Picker -->
+                <div style="margin-top: 24px;">
+                  <div style="font-weight: 700; margin-bottom: 2px;">Warna Identitas Aksen</div>
+                  <div class="text-muted" style="font-size: 0.8rem; margin-bottom: 12px;">Pilih warna penanda utama visual tombol dan indikator navigasi.</div>
+                  
+                  <div class="accent-color-picker">
+                    <div class="accent-bubble" id="accent-teal" onclick="switchAccent('teal')" title="Teal Medis"></div>
+                    <div class="accent-bubble" id="accent-emerald" onclick="switchAccent('emerald')" title="Hijau Sehat"></div>
+                    <div class="accent-bubble" id="accent-blue" onclick="switchAccent('blue')" title="Biru Jaminan"></div>
+                    <div class="accent-bubble" id="accent-violet" onclick="switchAccent('violet')" title="Ungu Elegan"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Account Security Card -->
+              <div class="settings-card glass-card" style="margin-top: 24px;">
+                <div class="card-title">Keamanan & Akun Administrator</div>
+                <form id="form-settings-account" onsubmit="saveAccountSettings(event)">
+                  <div class="form-group">
+                    <label for="settings-admin-username">Username Baru</label>
+                    <input type="text" id="settings-admin-username" class="form-control" required placeholder="admin">
+                  </div>
+                  <div class="form-group">
+                    <label for="settings-admin-password">Password Baru</label>
+                    <input type="password" id="settings-admin-password" class="form-control" required placeholder="Masukkan password baru">
+                  </div>
+                  <div class="form-group">
+                    <label for="settings-admin-confirm-password">Konfirmasi Password Baru</label>
+                    <input type="password" id="settings-admin-confirm-password" class="form-control" required placeholder="Ulangi password baru">
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Perbarui Kredensial Akun
+                  </button>
+                </form>
+              </div>
+
+            </div>
+
+            <!-- Identity Profile (Kanan) -->
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+              
+              <div class="settings-card glass-card">
+                <div class="card-title">Identitas Puskesmas & Kop Surat</div>
+                
+                <form id="form-settings" onsubmit="saveSettings(event)">
+                  <div class="form-group">
+                    <label for="settings-pharmacy-name">Nama Puskesmas</label>
+                    <input type="text" id="settings-pharmacy-name" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="settings-pharmacy-address">Alamat Puskesmas</label>
+                    <input type="text" id="settings-pharmacy-address" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="settings-pharmacy-phone">Nomor Telepon Kontak</label>
+                    <input type="text" id="settings-pharmacy-phone" class="form-control" required>
+                  </div>
+                  
+                  <div class="modal-form-grid" style="grid-template-columns: 1.1fr 0.9fr; margin-bottom: 0;">
+                    <div class="form-group">
+                      <label for="settings-pusk-kepala">Kepala Puskesmas</label>
+                      <input type="text" id="settings-pusk-kepala" class="form-control" placeholder="Nama & Gelar" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="settings-pusk-kepala-nip">NIP Kepala</label>
+                      <input type="text" id="settings-pusk-kepala-nip" class="form-control" placeholder="NIP" required>
+                    </div>
+                  </div>
+
+                  <div class="modal-form-grid" style="grid-template-columns: 1.1fr 0.9fr; margin-bottom: 0;">
+                    <div class="form-group">
+                      <label for="settings-pusk-apoteker">Apoteker PJ</label>
+                      <input type="text" id="settings-pusk-apoteker" class="form-control" placeholder="Nama & Gelar" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="settings-pusk-apoteker-sipa">SIPA Apoteker</label>
+                      <input type="text" id="settings-pusk-apoteker-sipa" class="form-control" placeholder="SIPA / SIP" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="settings-pharmacy-footer">Aturan / Keterangan Kaki Tiket Obat</label>
+                    <textarea id="settings-pharmacy-footer" class="form-control" style="min-height: 70px;" required></textarea>
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Simpan Identitas Puskesmas
+                  </button>
+                </form>
+              </div>
+
+              <!-- Custom Logo Puskesmas (Bawah) -->
+              <div class="settings-card glass-card">
+                <div class="card-title">Kustomisasi Logo Puskesmas</div>
+                <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+                  <div class="logo-preview-box" style="width: 90px; height: 90px; border-radius: var(--radius-sm); border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--bg-badge);">
+                    <img id="settings-logo-preview" style="width: 100%; height: 100%; object-fit: contain; display: none;" alt="Preview Logo">
+                    <svg id="settings-logo-placeholder" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="file" id="settings-logo-input" accept="image/*" style="display: none;" onchange="handleLogoUpload(this)">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('settings-logo-input').click()">Pilih Logo</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeCustomLogo()">Hapus Logo</button>
+                    <span class="text-muted" style="font-size: 0.72rem;">Unggah logo logo format PNG/JPG aspek 1:1.</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ======================================= -->
+  <!-- 3. MODALS CONTAINER OVERLAYS -->
+  <!-- ======================================= -->
+
+  <!-- A. Modal Tambah / Edit Obat -->
+  <div class="modal-backdrop" id="modal-medicine">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 id="modal-medicine-title">Tambah Data Ketersediaan Obat</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-medicine')">&times;</button>
+      </div>
+      <form id="form-medicine" onsubmit="handleSaveMedicine(event)">
+        <div class="modal-body">
+          <input type="hidden" id="medicine-index">
+          <input type="hidden" id="medicine-code">
+          
+          <div class="modal-form-grid">
+            <div class="form-group">
+              <label for="medicine-batch">Nomor Batch</label>
+              <input type="text" id="medicine-batch" class="form-control" placeholder="Contoh: BCH-220" required>
+            </div>
+            <div class="form-group">
+              <label for="medicine-category">Golongan Obat</label>
+              <select id="medicine-category" class="form-control" required>
+                <option value="Obat Bebas">Obat Bebas</option>
+                <option value="Obat Bebas Terbatas">Bebas Terbatas</option>
+                <option value="Obat Keras">Obat Keras</option>
+                <option value="Psikotropika/Narkotika">Psikotropika/Narkotika</option>
+                <option value="Alat Kesehatan">Alat Kesehatan</option>
+              </select>
+            </div>
+            <div class="form-group modal-form-grid-full">
+              <label for="medicine-name">Nama Obat & Kekuatan Sediaan</label>
+              <input type="text" id="medicine-name" class="form-control" placeholder="Contoh: Amoxicillin 500mg" list="medicine-name-suggestions" required>
+              <datalist id="medicine-name-suggestions"></datalist>
+            </div>
+            <div class="form-group">
+              <label for="medicine-stock">Jumlah Stok Gudang</label>
+              <input type="number" id="medicine-stock" class="form-control" placeholder="0" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="medicine-unit">Satuan Kemasan</label>
+              <input type="text" id="medicine-unit" class="form-control" placeholder="tablet / botol / kapsul / pcs" required>
+            </div>
+            <div class="form-group">
+              <label for="medicine-expiry">Tanggal Kedaluwarsa</label>
+              <input type="date" id="medicine-expiry" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <div style="font-size: 0.72rem; color: var(--text-muted); display:flex; align-items:center; height: 100%;">
+                Sistem akan memperingatkan jika masa kedaluwarsa &lt; 90 hari.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-medicine')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Data Obat</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- C. Modal Pratinjau Tiket Etiket Obat / Struk (Thermal) -->
+  <div class="modal-backdrop" id="modal-receipt">
+    <div class="modal-window" style="max-width: 380px;">
+      <div class="modal-header">
+        <h3>Pratinjau Etiket & Struk</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-receipt')">&times;</button>
+      </div>
+      
+      <!-- Thermal Paper Body -->
+      <div class="modal-body" style="background-color: var(--bg-badge); padding: 16px;">
+        <div class="receipt-paper" id="receipt-preview-content">
+          <!-- JS Render -->
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-receipt')">Tutup</button>
+        <button type="button" class="btn btn-primary" onclick="executePrintReceipt()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          Cetak Tiket Obat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- D. Modal Konfirmasi Keluar (Logout) -->
+  <div class="modal-backdrop" id="modal-logout">
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3>Konfirmasi Keluar</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-logout')">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center; padding: 32px 24px;">
+        <div style="background-color: var(--danger-light); color: var(--danger); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
+        <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">Apakah Anda yakin ingin keluar?</h4>
+        <p class="text-muted" style="font-size: 0.875rem;">Sesi Anda saat ini akan diakhiri, Anda perlu login kembali untuk mengakses fitur aplikasi.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-logout')">Batal</button>
+        <button type="button" class="btn btn-danger" onclick="executeLogout()">Keluar Sistem</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- 4. TOAST CONTAINER NOTIFICATIONS -->
+  <div id="toast-container"></div>
+
+  <!-- 5. WRAPPER CETAK STRUK THERMAL (Kertas Kecil) -->
+  <div id="print-receipt-wrapper"></div>
+
+  <!-- 6. WRAPPER CETAK LAPORAN LPLPO (Landscape A4) -->
+  <div id="print-invoice-a4-wrapper"></div>
+
+  <!-- Mobile bottom navigation bar -->
+  <div class="mobile-nav glass-card">
+    <div class="mobile-nav-link active" id="m-nav-dashboard" onclick="switchTab('dashboard')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+      <span>Dashboard</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-pos" onclick="switchTab('pos')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 5-5-5-5 5"/><path d="m17 19-5 5-5-5"/></svg>
+      <span>Resep</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-dispense" onclick="switchTab('dispense')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Pengeluaran</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-inventory" onclick="switchTab('inventory')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 21.5h3a6 6 0 0 0 6-6v-7a6 6 0 0 0-6-6h-3a6 6 0 0 0-6 6v7a6 6 0 0 0 6 6Z"/><path d="M4.5 10.5h15"/><path d="M12 2.5v19"/></svg>
+      <span>Kartu Stok</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-opname" onclick="switchTab('opname')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+      <span>Opname</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-mutation" onclick="switchTab('mutation')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7 17 11"/><path d="M3 17 7 21 3 25"/><path d="M21 7H9a5 5 0 0 0-5 5v3"/><path d="M3 17h12a5 5 0 0 0 5-5V9"/></svg>
+      <span>Mutasi</span>
+    </div>
+    <div class="mobile-nav-link" id="m-nav-lplpo" onclick="switchTab('lplpo')">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Stok Obat</span>
+    </div>
+
+  </div>
+
+  <!-- Script Logic File -->
+  <script src="app.js?v=2.0"></script>
+</body>
+</html>
